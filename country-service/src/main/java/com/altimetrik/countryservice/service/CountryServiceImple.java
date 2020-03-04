@@ -25,7 +25,7 @@ public class CountryServiceImple implements CountryService {
     CountryServiceProxy countryServiceProxy;
 
     @Override
-    public boolean loadCountryData() {
+    public List<CountryDTO> loadCountryData() {
         ResponseEntity<List<Object>> response = restTemplate.exchange("http://api.worldbank.org/v2/country?format=json", HttpMethod.GET, null, new ParameterizedTypeReference<List<Object>>() {});
         ObjectMapper mapper = new ObjectMapper();
         mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
@@ -37,21 +37,30 @@ public class CountryServiceImple implements CountryService {
         System.out.println(responseList);
 
         ArrayList<CountryDTO> resultList = new ArrayList<>();
-        CountryDetail c = new CountryDetail();
         for (CountryDetail cd: responseList) {
             resultList.add(
-                    new CountryDTO(
-                            cd.getId(),
-                            cd.getIso2Code(),
-                            cd.getName(),
-                            cd.getRegion().getValue(),
-                            cd.getIncomeLevelObject() ==null ? "":cd.getIncomeLevelObject().getValue() ,
-                            cd.getLendingTypeObject() == null? "": cd.getLendingTypeObject().getValue(),
-                            cd.getCapitalCity(),
-                            cd.getLatitude(),
-                            cd.getLongitude()));
+            		new CountryDTO(cd.getIso2Code(),cd.getName(),
+            				cd.getRegion() == null? "": cd.getRegion().getValue()
+            				,cd.getIncomeLevelObject() == null? "": cd.getIncomeLevelObject().getValue(),
+            						cd.getLendingTypeObject() == null? "": cd.getLendingTypeObject().getValue(),
+            				cd.getCapitalCity(), cd.getLongitude(),cd.getLatitude()));
+           		
         }
-
-        return countryServiceProxy.loadCountryData(resultList);
+        System.out.println(" result list !!!!!!!!!!");
+        System.out.println(resultList);
+        List<CountryDTO> returnedList = countryServiceProxy.loadCountryData(resultList);
+        if (returnedList == null){
+            System.out.println("returned list is null");
+        }else {
+            System.out.println("returned list .............");
+            System.out.println(returnedList);
+        }
+        return returnedList;
     }
+
+	@Override
+	public CountryDTO getCountryInfo(String code, String name, String city) {
+		// TODO Auto-generated method stub
+		return countryServiceProxy.getCountryInfo(code, name, city);
+	}
 }
