@@ -28,7 +28,7 @@ class CountryServiceTest {
     }
     @Test
     void save() {
-        country = new Country("CHN","CN","CHINA","East Asia & Pacific","","","Beijing","40.0495","116.286");
+        country = new Country(1l,"CHN","CN","CHINA","East Asia & Pacific","","","Beijing","40.0495");
         Mockito.when(repository.save(country)).thenReturn(country);
         assertEquals(country,countryService.save(country));
     }
