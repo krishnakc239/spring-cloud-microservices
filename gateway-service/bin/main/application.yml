@@ -15,11 +15,9 @@ eureka:
     hostname: localhost
 
 zuul:
-  host:
-    connect-timeout-millis: 60000
-    socket-timeout-millis: 60000
-    max-total-connections: 1000
-    max-per-route-connections: 100
+#  host:
+#    connect-timeout-millis: 5000000
+#    socket-timeout-millis: 5000000
   sensitiveHeaders:
   ignored-headers: Access-Control-Allow-Credentials, Access-Control-Allow-Origin
   routes:
@@ -38,8 +36,9 @@ hystrix:
       execution:
         isolation:
           thread:
-            timeoutInMilliseconds: 60000
-
+            timeoutInMilliseconds: 1000000
+            
+           
 ribbon:
   ConnectTimeout: 1000000
   ReadTimeout: 1000000  
